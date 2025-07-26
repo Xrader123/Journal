@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Journal - ADHD Friendly</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>Trading Journal</h1>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- Trades Section -->
+            <section id="trades-section" class="section active">
+                <div class="section-header">
+                    <h2>Trades</h2>
+                    <button id="add-trade-btn" class="btn btn--primary">+ Add Trade</button>
+                </div>
+
+                <!-- Trade List -->
+                <div id="trade-list" class="trade-list">
+                    <!-- Trade items will be populated by JavaScript -->
+                </div>
+
+                <!-- Trade Filters -->
+                <div class="filters-panel">
+                    <div class="filter-group">
+                        <label for="status-filter">Status:</label>
+                        <select id="status-filter" class="form-control">
+                            <option value="all">All</option>
+                            <option value="open">Open</option>
+                            <option value="closed">Closed</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="date-filter">Date Range:</label>
+                        <select id="date-filter" class="form-control">
+                            <option value="all">All Time</option>
+                            <option value="7days">Last 7 Days</option>
+                            <option value="30days">Last 30 Days</option>
+                            <option value="fiscal">Fiscal Year</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="section">
+                <div class="section-header">
+                    <h2>Dashboard</h2>
+                    <div class="toggle-switch">
+                        <label>
+                            <input type="checkbox" id="rules-toggle">
+                            <span class="toggle-slider"></span>
+                            Rules Followed Only
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Metrics Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h3>Total Trades</h3>
+                        <div class="metric-value" id="total-trades">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Net P/L</h3>
+                        <div class="metric-value" id="net-pnl">₹0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Win Rate</h3>
+                        <div class="metric-value" id="win-rate">0%</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Profit Factor</h3>
+                        <div class="metric-value" id="profit-factor">0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Avg Winner</h3>
+                        <div class="metric-value" id="avg-winner">₹0</div>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Avg Loser</h3>
+                        <div class="metric-value" id="avg-loser">₹0</div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3>Equity Curve</h3>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="equity-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Monthly P&L</h3>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="monthly-pnl-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Funds Section -->
+            <section id="funds-section" class="section">
+                <div class="section-header">
+                    <h2>Funds</h2>
+                    <button id="add-funds-btn" class="btn btn--primary">+ Add Movement</button>
+                </div>
+
+                <div class="funds-summary">
+                    <div class="fund-card">
+                        <h3>Current Balance</h3>
+                        <div class="fund-value" id="current-balance">₹0</div>
+                    </div>
+                </div>
+
+                <div id="funds-list" class="funds-list">
+                    <!-- Fund movements will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Monte Carlo Section -->
+            <section id="monte-carlo-section" class="section">
+                <div class="section-header">
+                    <h2>Monte Carlo Simulation</h2>
+                    <div class="toggle-switch">
+                        <label>
+                            <input type="checkbox" id="mc-rules-toggle">
+                            <span class="toggle-slider"></span>
+                            Rules Followed Only
+                        </label>
+                    </div>
+                </div>
+
+                <div class="monte-carlo-controls">
+                    <button id="run-simulation-btn" class="btn btn--primary">Run Simulation</button>
+                </div>
+
+                <div class="chart-card">
+                    <h3>Probability Distribution</h3>
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <canvas id="monte-carlo-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="monte-carlo-explanation">
+                    <p>Monte Carlo simulation shows the probability distribution of potential future returns based on your historical trading performance.</p>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="section">
+                <div class="section-header">
+                    <h2>Settings</h2>
+                </div>
+
+                <div class="settings-groups">
+                    <div class="settings-group">
+                        <h3>Theme</h3>
+                        <div class="toggle-switch">
+                            <label>
+                                <input type="checkbox" id="theme-toggle">
+                                <span class="toggle-slider"></span>
+                                Dark Mode
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Manage Setups</h3>
+                        <div class="manage-items">
+                            <div id="setups-list" class="items-list"></div>
+                            <button id="add-setup-btn" class="btn btn--secondary">+ Add Setup</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Manage Tags</h3>
+                        <div class="manage-items">
+                            <div id="tags-list" class="items-list"></div>
+                            <button id="add-tag-btn" class="btn btn--secondary">+ Add Tag</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Data Management</h3>
+                        <button id="export-btn" class="btn btn--outline">Export to CSV</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-section="trades">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Trades</span>
+            </button>
+            <button class="nav-btn" data-section="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button class="nav-btn" data-section="funds">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">Funds</span>
+            </button>
+            <button class="nav-btn" data-section="monte-carlo">
+                <span class="nav-icon">🎲</span>
+                <span class="nav-label">Monte Carlo</span>
+            </button>
+            <button class="nav-btn" data-section="settings">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">Settings</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Trade Modal -->
+    <div id="trade-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="trade-modal-title">Add Trade</h3>
+                <button class="close-btn" id="close-trade-modal">&times;</button>
+            </div>
+            <form id="trade-form" class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Symbol</label>
+                    <input type="text" id="trade-symbol" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Setup</label>
+                    <select id="trade-setup" class="form-control" required>
+                        <!-- Options populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Initial Risk (₹)</label>
+                    <input type="number" id="trade-risk" class="form-control" required min="1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="trade-rules-followed">
+                        All Rules Followed
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tags</label>
+                    <div id="trade-tags" class="tags-selector">
+                        <!-- Tag checkboxes populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Situation</label>
+                    <select id="trade-situation" class="form-control" required>
+                        <!-- Options populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn--secondary" id="cancel-trade">Cancel</button>
+                    <button type="submit" class="btn btn--primary">Save Trade</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Decision Modal -->
+    <div id="decision-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Decision</h3>
+                <button class="close-btn" id="close-decision-modal">&times;</button>
+            </div>
+            <form id="decision-form" class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" id="decision-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Action</label>
+                    <select id="decision-action" class="form-control" required>
+                        <option value="Buy">Buy</option>
+                        <option value="Sell">Sell</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" id="decision-quantity" class="form-control" required min="1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Price (₹)</label>
+                    <input type="number" id="decision-price" class="form-control" required min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Comments</label>
+                    <textarea id="decision-comments" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn--secondary" id="cancel-decision">Cancel</button>
+                    <button type="submit" class="btn btn--primary">Save Decision</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Fund Movement Modal -->
+    <div id="fund-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Fund Movement</h3>
+                <button class="close-btn" id="close-fund-modal">&times;</button>
+            </div>
+            <form id="fund-form" class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" id="fund-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Amount (₹)</label>
+                    <input type="number" id="fund-amount" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    <select id="fund-type" class="form-control" required>
+                        <option value="Addition">Addition</option>
+                        <option value="Withdrawal">Withdrawal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Comments</label>
+                    <textarea id="fund-comments" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn--secondary" id="cancel-fund">Cancel</button>
+                    <button type="submit" class="btn btn--primary">Save Movement</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Trade Detail Modal -->
+    <div id="trade-detail-modal" class="modal hidden">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="trade-detail-title">Trade Details</h3>
+                <button class="close-btn" id="close-trade-detail-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="trade-detail-content">
+                    <!-- Trade details populated by JavaScript -->
+                </div>
+                <div class="decisions-section">
+                    <div class="decisions-header">
+                        <h4>Decisions</h4>
+                        <button id="add-decision-btn" class="btn btn--primary">+ Add Decision</button>
+                    </div>
+                    <div id="decisions-list">
+                        <!-- Decisions populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- First Launch Modal -->
+    <div id="first-launch-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome to Trading Journal</h3>
+            </div>
+            <form id="first-launch-form" class="modal-body">
+                <p>Let's set up your trading journal with your starting balance.</p>
+                <div class="form-group">
+                    <label class="form-label">Starting Balance (₹)</label>
+                    <input type="number" id="starting-balance" class="form-control" required min="1">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn--primary btn--full-width">Get Started</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

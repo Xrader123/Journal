@@ -1,0 +1,11 @@
+Symbol,Setup,Entry_Price,Exit_Price,Initial_Risk,Quantity,All_Rules_Followed,PnL,R_Multiple,Winner,Cumulative_PnL
+AAPL,Breakout,150.0,165.0,500,100,True,1500.0,3.0,True,1500.0
+MSFT,Support,280.0,270.0,300,50,True,-500.0,-1.6666666666666667,False,1000.0
+GOOGL,Pullback,2500.0,2600.0,800,10,False,1000.0,1.25,True,2000.0
+TSLA,Momentum,800.0,720.0,1000,25,True,-2000.0,-2.0,False,0.0
+AAPL,Reversal,155.0,148.0,400,80,False,-560.0,-1.4,False,-560.0
+MSFT,Breakout,285.0,295.0,250,40,True,400.0,1.6,True,-160.0
+NVDA,Support,400.0,420.0,600,30,True,600.0,1.0,True,440.0
+AMZN,Pullback,3200.0,3100.0,1200,8,False,-800.0,-0.6666666666666666,False,-360.0
+META,Momentum,320.0,340.0,500,40,True,800.0,1.6,True,440.0
+TSLA,Reversal,750.0,780.0,800,20,True,600.0,0.75,True,1040.0
