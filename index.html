@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Journal</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Trade Journal">
+    <!-- Chart.js for Dashboard Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- App Content: Add your HTML structure here -->
+    <header>
+        <h1>Trade Journal</h1>
+        <!-- Example: Navigation tabs for Trades, Dashboard, Money, Export -->
+        <nav>
+            <button>Trades</button>
+            <button>Dashboard</button>
+            <button>Money</button>
+            <button>Export</button>
+        </nav>
+    </header>
+    <main>
+        <!-- Placeholder for dynamic content like trade list, forms, charts -->
+        <section id="trades"></section>
+        <section id="dashboard">
+            <!-- Charts and metrics will be rendered here via app.js -->
+        </section>
+        <section id="money"></section>
+    </main>
+    
+    <script src="app.js"></script>
+    <!-- Service Worker Registration for PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log('Service Worker registered'))
+                .catch((err) => console.log('Service Worker registration failed:', err));
+        }
+    </script>
+</body>
+</html>
